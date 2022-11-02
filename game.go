@@ -99,7 +99,7 @@ func (g Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight
 func NewWin() error {
 
 	ebiten.SetWindowSize(int(windowWidth), int(windowHeight))
-	ebiten.SetWindowTitle("chihuo-mp3-spectrum")
+	ebiten.SetWindowTitle("chimp3-spectrum")
 
 	if err := ebiten.RunGame(game); err != nil {
 		return err
