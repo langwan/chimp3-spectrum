@@ -3,19 +3,19 @@ package main
 import (
 	"image/color"
 	"spectrum/app"
-	"spectrum/preset"
+	"spectrum/scene"
+	"spectrum/sdk"
 )
 
-var led *preset.Led2
+var led *scene.Led2
 
 func main() {
-
+	app.PlayerManager = &sdk.PlayList{Player: sdk.New()}
 	game = &Game{
-		frequencyBands: 256,
-		samples:        make(chan [2][]float64),
+		state: gameStateStart,
 	}
 
-	led = &preset.Led2{
+	led = &scene.Led2{
 		Fraction:       1.0 / 12.0,
 		SpacingFactorX: 0.2,
 		MinDecibels:    0.0,
@@ -36,16 +36,16 @@ func main() {
 		},
 	}
 
-	go func() {
-
-		Player("./samples/5.mp3", func(spectrum [2][]float64, sampleRate int) {
-			//game.samples <- spectrum
-			app.SampleRate = sampleRate
-			app.FftSamples[0] = spectrum[0]
-			app.FftSamples[1] = spectrum[1]
-
-		})
-	}()
+	//go func() {
+	//
+	//	Player("./samples/5.mp3", func(spectrum [2][]float64, sampleRate int) {
+	//		//game.samples <- spectrum
+	//		app.SampleRate = sampleRate
+	//		app.FftSamples[0] = spectrum[0]
+	//		app.FftSamples[1] = spectrum[1]
+	//
+	//	})
+	//}()
 	err := NewWin()
 	if err != nil {
 		panic(err)

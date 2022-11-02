@@ -104,35 +104,6 @@ func analyserFrequency(samples [2][]float64) [2][]float64 {
 	return spectrum
 }
 
-//func analyserFrequency100(samples [2][]float64) {
-//	var max [2]float64
-//	var min [2]float64
-//	for i, channelSamples := range samples {
-//		max[i] = -1
-//		min[i] = 1
-//		for j, _ := range channelSamples {
-//			if j == 0 {
-//				continue
-//			}
-//			if samples[i][j] > max[i] {
-//				max[i] = samples[i][j]
-//			}
-//			if samples[i][j] < min[i] {
-//				min[i] = samples[i][j]
-//			}
-//		}
-//	}
-//
-//	for i, channelSamples := range samples {
-//		dc := channelSamples[0] / float64(len(channelSamples))
-//
-//		for j, _ := range channelSamples {
-//			samples[i][j], _ = helper_graphic.RangeMapper(samples[i][j]/(float64(len(samples[i]))/2), math.MinInt16, math.MaxInt16, 0, 100)
-//		}
-//		samples[i][0] = dc
-//	}
-//}
-
 func decode(p []byte) (sample [2]float64) {
 	for c := range sample {
 		x, n := decodeSample(bitDepth, p)

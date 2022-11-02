@@ -1,4 +1,4 @@
-package preset
+package scene
 
 import (
 	"github.com/hajimehoshi/ebiten/v2"
