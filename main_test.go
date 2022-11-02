@@ -51,3 +51,34 @@ func TestInt16ToFloat64(t *testing.T) {
 	t.Log(Int16ToFloat64(0))
 	t.Log(complex(Int16ToFloat64(-100), 0))
 }
+
+func TestOctaveBandCenterFrequency(t *testing.T) {
+	var a uint8 = 34
+	var b uint8 = 255
+	t.Log(a - b)
+}
+
+func OctaveBandCenterFrequency(factor float64) []float64 {
+	var bands []float64
+	var base float64 = 1000
+	current := base
+	bands = append(bands, current)
+	for {
+		current = current / math.Pow(2, factor)
+		bands = append([]float64{current}, bands...)
+		if math.Round(current) < 20 {
+			break
+		}
+
+	}
+	current = base
+	for {
+		current = current * math.Pow(2, factor)
+		bands = append(bands, current)
+		if math.Round(current) > 20000 {
+			break
+		}
+
+	}
+	return bands
+}

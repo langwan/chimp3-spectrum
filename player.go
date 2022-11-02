@@ -21,7 +21,7 @@ const (
 	bitDepth                              = 2
 )
 
-func Player(filename string, analyser func(spectrum [2][]float64)) error {
+func Player(filename string, analyser func(spectrum [2][]float64, sampleRate int)) error {
 	mp3Data, err := os.ReadFile(filename)
 	if err != nil {
 		return err
@@ -48,7 +48,7 @@ func Player(filename string, analyser func(spectrum [2][]float64)) error {
 
 		spectrum := analyserFrequency(samples)
 		//analyserFrequency100(spectrum)
-		analyser(spectrum)
+		analyser(spectrum, mp3Decoder.SampleRate())
 		if err != nil {
 			return err
 		}

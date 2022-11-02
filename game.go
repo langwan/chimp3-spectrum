@@ -6,12 +6,12 @@ import (
 	"image"
 	"image/color"
 	"math"
+	"spectrum/app"
 	"sync"
 )
 
 const (
-	windowWidth  float64 = 800
-	windowHeight         = 200
+	windowWidth float64 = 1080
 
 	barPadding       float64 = 2
 	capHeight        float64 = 2
@@ -20,15 +20,14 @@ const (
 )
 
 var (
-	game *Game
+	windowHeight = math.Round(windowWidth / 16.0 * 9)
+	game         *Game
 )
 
 type Band struct {
 	lower float64
 	upper float64
 }
-
-var gSamples [2][]float64
 
 var gSamplesCache [2][]float64
 var gCapCache [2][]float64
@@ -51,13 +50,17 @@ var samplesCache *[2][]float64
 var samplesBuffer []float64
 
 func (g Game) Draw(screen *ebiten.Image) {
+	led.DrawA(screen)
+	led.DrawB(screen)
+
+	return
 	game.mu.Lock()
 	defer game.mu.Unlock()
 	//msg := fmt.Sprintf("TPS: %0.2f FPS: %0.2f", ebiten.ActualTPS(), ebiten.ActualFPS())
 	//ebitenutil.DebugPrint(screen, msg)
 	//samples := <-g.samples
-	DrawBars(screen, gSamples, 0)
-	DrawBars(screen, gSamples, 1)
+	DrawBars(screen, app.FftSamples, 0)
+	DrawBars(screen, app.FftSamples, 1)
 }
 
 func (g Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
@@ -146,7 +149,7 @@ func DrawCap(dst *ebiten.Image, x, y, width, height float64) {
 		ColorR: float32(1),
 		ColorG: float32(1),
 		ColorB: float32(1),
-		ColorA: 1,
+		ColorA: float32(1),
 	}
 
 	vertices[1] = ebiten.Vertex{
@@ -157,7 +160,7 @@ func DrawCap(dst *ebiten.Image, x, y, width, height float64) {
 		ColorR: float32(1),
 		ColorG: float32(1),
 		ColorB: float32(1),
-		ColorA: 1,
+		ColorA: float32(1),
 	}
 
 	vertices[2] = ebiten.Vertex{
@@ -168,7 +171,7 @@ func DrawCap(dst *ebiten.Image, x, y, width, height float64) {
 		ColorR: float32(1),
 		ColorG: float32(1),
 		ColorB: float32(1),
-		ColorA: 1,
+		ColorA: float32(1),
 	}
 
 	vertices[3] = ebiten.Vertex{
@@ -179,7 +182,7 @@ func DrawCap(dst *ebiten.Image, x, y, width, height float64) {
 		ColorR: float32(1),
 		ColorG: float32(1),
 		ColorB: float32(1),
-		ColorA: 1,
+		ColorA: float32(1),
 	}
 	op := &ebiten.DrawTrianglesOptions{}
 	op.Address = ebiten.AddressUnsafe
@@ -193,14 +196,11 @@ func DrawBars(screen *ebiten.Image, samples [2][]float64, channel int) {
 		return
 	}
 
-	//game.mu.Lock()
-	//defer game.mu.Unlock()
-
 	sw, sh := screen.Size()
 	var spectrumHeight float64 = float64(sh) - 2
 	barWidth := (float64(sw)-barPadding)/game.frequencyBands - barPadding
 
-	barNum := int(math.Floor(float64(sw) / float64(barWidth+barPadding)))
+	barNum := int(math.Floor(float64(sw)/barWidth + barPadding))
 	var bars []float64
 	step := int(math.Floor(float64(len(samples[channel])) / float64(barNum)))
 
@@ -250,24 +250,24 @@ func DrawBars(screen *ebiten.Image, samples [2][]float64, channel int) {
 				R: 99,
 				G: 151,
 				B: 189,
-				A: 255,
+				A: 150,
 			}, color.RGBA{
 				R: 51,
 				G: 59,
 				B: 64,
-				A: 255,
+				A: 150,
 			})
 		} else {
 			DrawBar(screen, start+float64(i)*(barWidth+barPadding), spectrumHeight-vv, barWidth, vv, color.RGBA{
 				R: 209,
 				G: 120,
 				B: 39,
-				A: 255,
+				A: 150,
 			}, color.RGBA{
 				R: 118,
 				G: 77,
 				B: 43,
-				A: 255,
+				A: 150,
 			})
 		}
 
