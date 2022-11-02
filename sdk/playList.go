@@ -11,8 +11,6 @@ type PlayList struct {
 	CurrentIndex int
 }
 
-//var PlayerList PlayList
-
 func (p *PlayList) PlayList(files []string) error {
 	//speaker.Lock()
 	//defer speaker.Unlock()

@@ -1,16 +1,29 @@
 package app
 
 import (
+	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/examples/resources/fonts"
 	"golang.org/x/image/font"
 	"golang.org/x/image/font/opentype"
+	"image/color"
 	"spectrum/sdk"
 )
 
-var FftSamples [2][]float64
-var SampleRate int
-var PlayerManager *sdk.PlayList
-var FontMPlus1pRegular font.Face
+type _GameState int
+
+const (
+	GameStateStart   = 0
+	GameStatePlaying = 1
+)
+
+var (
+	WhiteImage         = ebiten.NewImage(3, 3)
+	SampleRate         int
+	PlayerManager      *sdk.PlayList
+	FontMPlus1pRegular font.Face
+	FrequencyFrame     sdk.FrequencyFrame
+	GameState          _GameState
+)
 
 func init() {
 	tt, err := opentype.Parse(fonts.PressStart2P_ttf)
@@ -26,4 +39,5 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
+	WhiteImage.Fill(color.White)
 }

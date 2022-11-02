@@ -1,11 +1,8 @@
 package start
 
 import (
-	"errors"
 	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/inpututil"
 	"github.com/hajimehoshi/ebiten/v2/text"
-	"github.com/ncruces/zenity"
 	"image/color"
 	"spectrum/app"
 )
@@ -15,35 +12,7 @@ type Scene struct {
 }
 
 func (s Scene) Update() error {
-	s.trigger(ebiten.KeyO, s.SelectFilesHandler)
-	return nil
-}
 
-func (s Scene) trigger(key ebiten.Key, handler func() error) {
-	if inpututil.IsKeyJustPressed(key) {
-		go handler()
-	}
-}
-
-func (s Scene) SelectFilesHandler() error {
-	files, err := zenity.SelectFileMultiple(
-		zenity.FileFilters{
-			{"选择mp3文件", []string{"*.mp3"}},
-		})
-	if err != nil {
-		return err
-	}
-
-	if err != nil {
-		return err
-	} else if len(files) < 1 {
-		return errors.New("selected files is empty")
-	}
-	err = app.PlayerManager.PlayList(files)
-	if err != nil {
-		return err
-	}
-	app.PlayerManager.Play(0)
 	return nil
 }
 

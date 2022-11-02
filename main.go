@@ -1,51 +1,20 @@
 package main
 
 import (
-	"image/color"
+	"fmt"
 	"spectrum/app"
-	"spectrum/scene"
 	"spectrum/sdk"
 )
 
-var led *scene.Led2
-
 func main() {
 	app.PlayerManager = &sdk.PlayList{Player: sdk.New()}
-	game = &Game{
-		state: gameStateStart,
+	app.PlayerManager.Player.PlayList = app.PlayerManager
+	app.PlayerManager.Player.UpdateFrequencyFrame = func(p *sdk.Player, frame sdk.FrequencyFrame) {
+		fmt.Println(frame)
+		app.FrequencyFrame = frame
 	}
+	game = &Game{}
 
-	led = &scene.Led2{
-		Fraction:       1.0 / 12.0,
-		SpacingFactorX: 0.2,
-		MinDecibels:    0.0,
-		MaxDecibels:    255.0,
-		LedCellHeight:  12.0,
-		SpacingFactorY: 0.2,
-		Color1: color.RGBA{
-			R: 0xff,
-			G: 0x56,
-			B: 0x00,
-			A: 200,
-		},
-		Color2: color.RGBA{
-			R: 0x22,
-			G: 0xff,
-			B: 0x00,
-			A: 200,
-		},
-	}
-
-	//go func() {
-	//
-	//	Player("./samples/5.mp3", func(spectrum [2][]float64, sampleRate int) {
-	//		//game.samples <- spectrum
-	//		app.SampleRate = sampleRate
-	//		app.FftSamples[0] = spectrum[0]
-	//		app.FftSamples[1] = spectrum[1]
-	//
-	//	})
-	//}()
 	err := NewWin()
 	if err != nil {
 		panic(err)
